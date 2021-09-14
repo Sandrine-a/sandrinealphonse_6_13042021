@@ -1,7 +1,12 @@
 const express = require('express');
+
+const cors = require('cors');
+
 //Importer mongoose pour utiliser mongo DB
 const mongoose = require('mongoose');
 
+//Importer le chemin vers le fichiers images
+const path = require('path');
 //Importation des routers:
 const userRoutes = require('./routes/user');
 //Routers les sauces:
@@ -18,22 +23,30 @@ mongoose.connect('mongodb+srv://admin:admin01@piiquante.tmgp6.mongodb.net/myFirs
 
 
 //Gestion des erreurs de CORS:
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-  next();
-});
+app.use(
+  cors({
+    origin(_, callback) {
+      callback(null, true);
+    },
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+    exposedHeaders: ['X-Filename'],
+  }),
+);
 
 app.use(express.urlencoded({extended: true}));
 
 //Analyse du corps de la req
 app.use(express.json());
 
+
+//Middleware pour telechargement d'image vers le static:
+app.use('/images', express.static(path.join(__dirname, 'images')));
+
 //Utilisation des routes user:
 app.use('/api/auth', userRoutes);
 
 //Utilisation des routes user:
-app.use('/api/sauce', sauceRoutes);
+app.use('/api/sauces', sauceRoutes);
 
 module.exports = app;
