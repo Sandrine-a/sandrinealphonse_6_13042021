@@ -1,5 +1,5 @@
 //Importer modèle User:
-const User = require('../models/User');
+const User = require('../models/user');
 
 //Importer bcrypt pour hash dans signup:
 const bcrypt = require('bcrypt');

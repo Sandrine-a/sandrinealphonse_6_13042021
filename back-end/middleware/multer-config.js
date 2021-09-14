@@ -1,16 +1,16 @@
 const multer = require('multer');
 
-//Ajout du dictionnaire des mimetypes
+//Dictionnaire des extensions
 const MIME_TYPES = {
-  'image/jpg' : 'jpg',
-  'image/jpeg' : 'jpeg',
-  'image/pgn' : 'png'
+  'image/jpg': 'jpg',
+  'image/jpeg': 'jpg',
+  'image/png': 'png'
 };
 
-//Middleware de gestion de fichiers img
+//Creation du middleware pour enregistrer les images
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
-    callback(null,'images')
+    callback(null, 'images');
   },
   filename: (req, file, callback) => {
     const name = file.originalname.split(' ').join('_');
