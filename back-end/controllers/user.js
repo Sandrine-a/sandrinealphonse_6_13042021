@@ -4,7 +4,7 @@ const User = require('../models/User');
 //Importer bcrypt pour hash dans signup:
 const bcrypt = require('bcrypt');
 
-//Importer jsonwebtoken oour générer des token d'auth:
+//Importer jsonwebtoken pour générer des token d'auth:
 const jwt = require('jsonwebtoken');
 
 //Fonction signup:

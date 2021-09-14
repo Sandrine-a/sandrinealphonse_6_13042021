@@ -1,11 +1,11 @@
 const express = require('express');
-//Importer pkg body-parser
-const bodyParser = require('body-parser');
 //Importer mongoose pour utiliser mongo DB
 const mongoose = require('mongoose');
 
-//Importer les routers:
+//Importation des routers:
 const userRoutes = require('./routes/user');
+//Routers les sauces:
+const sauceRoutes = require('./routes/sauce');
 
 const app = express();
 
@@ -25,10 +25,15 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(express.urlencoded({extended: true}));
+
 //Analyse du corps de la req
 app.use(express.json());
 
-//Utilisation des routes:
+//Utilisation des routes user:
 app.use('/api/auth', userRoutes);
+
+//Utilisation des routes user:
+app.use('/api/sauce', sauceRoutes);
 
 module.exports = app;

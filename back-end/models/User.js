@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 //Importer unique validator:
 const uniqueValidator = require('mongoose-unique-validator');
 
-//creation du schema de données pour User
+//Création du schema de données pour User
 const userSchema = mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: {type: String, required: true }
