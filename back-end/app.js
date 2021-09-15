@@ -34,11 +34,10 @@ app.use(
   }),
 );
 
+//Analyse du corps de la req
 app.use(express.urlencoded({extended: true}));
 
-//Analyse du corps de la req
 app.use(express.json());
-
 
 //Middleware pour telechargement d'image vers le static:
 app.use('/images', express.static(path.join(__dirname, 'images')));

@@ -1,6 +1,6 @@
 const multer = require('multer');
 
-//Dictionnaire des extensions
+//Répertoire des extensions
 const MIME_TYPES = {
   'image/jpg': 'jpg',
   'image/jpeg': 'jpg',
