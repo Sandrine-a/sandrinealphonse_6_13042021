@@ -17,6 +17,8 @@ router.post('/', auth, multer, sauceCtrl.createSauce);
 router.get('/:id', auth, sauceCtrl.getOneSauce);
 //Route modifier une sauce:
 router.put('/:id', auth, multer, sauceCtrl.modifySauce);
+//Route pour les like sauce:
+router.post('/:id/like', auth, sauceCtrl.likeOrDislikeSauce);
 //Route pour supprimer sauce:
 router.delete('/:id', auth, sauceCtrl.deleteSauce);
 
