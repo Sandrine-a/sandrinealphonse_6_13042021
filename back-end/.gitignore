@@ -1,1 +1,6 @@
+#les modules node
 node_modules
+
+#contenu du dossier images
+*.jp[e]g
+*png

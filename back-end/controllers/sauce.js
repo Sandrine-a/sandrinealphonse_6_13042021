@@ -1,7 +1,5 @@
 //Importer modèle sauce:
 const Sauce = require('../models/product');
-//Importer modèle like:
-const Like = require('../models/product');
 //Importer le pakg fs pour gestion des fichiers
 const fs = require('fs');
 
