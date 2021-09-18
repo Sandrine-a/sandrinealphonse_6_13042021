@@ -15,12 +15,5 @@ const sauceSchema = mongoose.Schema({
     usersDisliked: {type: Array, default:[]}
 });
 
-/* //Schéma pour Like/dislike des sauces:
-const likeSchema = mongoose.Schema({
-    like: {type: Number, default: 0},
-    dislikes: {type: Number, default: 0},
-    userId: {type: String}
-}); */
-
 //Export du Schema
 module.exports = mongoose.model('Sauce', sauceSchema);

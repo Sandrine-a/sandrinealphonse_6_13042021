@@ -95,10 +95,14 @@ exports.likeOrDislikeSauce = (req,res,next) => {
           $pull: {usersDisliked: req.body.userId}
         })
         .then(() => {
-          res.status(200).json({message: 'Vous avez dislike cette sauce'});}
+          res.status(201).json({message: 'Vous avez annuler le dislike cette sauce'});}
         )
         .catch(error => res.status(400).json({ error }));
 
+      }
+      // Autre 
+      else {
+        res.status(401).json({error: new Error(' Invalid request!')});
       }
     })
     .catch(error => res.status(500).json({ error }));  
