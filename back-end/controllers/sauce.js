@@ -34,9 +34,11 @@ exports.getOneSauce = (req, res, next) => {
 
 //Middleware pour Modifier une sauce:
 exports.modifySauce = (req,res, next) => {
-  const sauceObject = req.file ? {
-    ...JSON.parse(req.body.sauce),
-    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+  //Si file image ajoutée ou si uniquement corps de la requete
+  const sauceObject = req.file ? 
+  {
+    ...JSON.parse(req.body.sauce), ///partie sauce
+    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` //recuperation fichier image
   } : {
     ...req.body
   }              
@@ -59,9 +61,7 @@ exports.likeOrDislikeSauce = (req,res,next) => {
           { $inc: {likes: +1}, 
           $push: {usersLiked: req.body.userId}
         })
-        .then(() => {
-          res.status(201).json({message: 'Vous avez liké cette sauce'});}
-        )
+        .then(() => res.status(201).json({ message: ' Vous avez liké cette sauce !'}))
         .catch(error => res.status(400).json({ error }));
       }
       //Annuler like
@@ -70,9 +70,7 @@ exports.likeOrDislikeSauce = (req,res,next) => {
           { $inc: {likes: -1}, 
           $pull: {usersLiked: req.body.userId}
         })
-        .then(() => {
-          res.status(201).json({message: 'Vous avez enlevé votre like sur cette sauce'});}
-        )
+        .then(() => res.status(201).json({ message: ' Vous avez enlevé votre like sur cette sauce !'}))
         .catch(error => res.status(400).json({ error }));
       }
       //Dislike sauce
@@ -81,9 +79,7 @@ exports.likeOrDislikeSauce = (req,res,next) => {
           { $inc: {dislikes: +1}, 
           $push: {usersDisliked: req.body.userId}
         })
-        .then(() => {
-          res.status(201).json({message: 'Vous avez dislike cette sauce'});}
-        )
+        .then(() => res.status(201).json({ message: ' Vous avez enlevé votre disliké sur cette sauce !'}))
         .catch(error => res.status(400).json({ error }));
       }
       //Annuler disklie
@@ -92,9 +88,7 @@ exports.likeOrDislikeSauce = (req,res,next) => {
           { $inc: {dislikes: -1}, 
           $pull: {usersDisliked: req.body.userId}
         })
-        .then(() => {
-          res.status(201).json({message: 'Vous avez annuler le dislike cette sauce'});}
-        )
+        .then(() => res.status(201).json({ message: ' Vous avez annulé le dislike de cette sauce !'}))
         .catch(error => res.status(400).json({ error }));
 
       }
