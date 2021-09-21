@@ -34,12 +34,19 @@ exports.getOneSauce = (req, res, next) => {
 
 //Middleware pour Modifier une sauce:
 exports.modifySauce = (req,res, next) => {
-  //Si file image ajoutée ou si uniquement corps de la requete
+  //verification d'ajout de nouveau file img
   const sauceObject = req.file ? 
-  {
-    ...JSON.parse(req.body.sauce), ///partie sauce
-    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` //recuperation fichier image
-  } : {
+  //Si fichier img ajouté on supprime l'ancien file avec fs unlinkSync
+  Sauce.findOne({ _id: req.params.id})
+  .then(sauce => {
+    const filename = sauce.imageUrl.split('/images/')[1];
+    fs.unlinkSync(`images/${filename}`),
+    {
+      ...JSON.parse(req.body.sauce), ///partie sauce
+      imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` //recuperation fichier image
+    }
+  })
+  : { //si absence de new file on prend directement l'objet body de la req
     ...req.body
   }              
   Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id})
