@@ -1,9 +1,6 @@
-//Importer modèle sauce:
+//Importer modèle sauce
 const Sauce = require('../models/product');
-
-require('dotenv').config();
-
-//Importer le pakg fs pour gestion des fichiers
+//Importer le packg fs pour gestion des fichiers
 const fs = require('fs');
 
 //Middleware pour créer une sauce:
@@ -49,7 +46,7 @@ exports.modifySauce = (req,res, next) => {
       try {
         fs.unlinkSync(`images/${oldFilename}`)
       } catch(error) {
-        console.log(error);
+        throw new Error("Erreur avec l'image envoyée")
       }
     }
     Sauce.updateOne({ _id: req.params.id }, updatedSauce)

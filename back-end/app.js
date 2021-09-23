@@ -4,7 +4,6 @@ const cors = require('cors');
 
 //Importer mongoose pour utiliser mongo DB
 const mongoose = require('mongoose');
-require('dotenv').config()
 
 //Importer le chemin vers le fichiers images
 const path = require('path');

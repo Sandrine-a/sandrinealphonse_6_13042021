@@ -4,15 +4,14 @@ const jwt = require('jsonwebtoken');
 module.exports = (req, res, next) => {
   try {
     const token = req.headers.authorization.split(' ')[1]; 
-    const decodedToken = jwt.verify(token, 'anNvbmNvbXBsZXhfc2VjcmV0X1Rva2Vu'); 
+    const decodedToken = jwt.verify(token, process.env.USER_SECRET_TOKEN); 
     const userId = decodedToken.userId; 
     if (req.body.userId && req.body.userId !== userId) {
-      res.status(403).json({ message: ' unauthorized request'});
+      throw new Error(' unauthorized User!');;
     } else {
       next();
     }
-  } catch {
-    res.status(401).json({error: new Error('Invalid request!')
-    });
+  } catch(error) {
+    res.status(403).json({error: (' unauthorized request!')});
   }
 };

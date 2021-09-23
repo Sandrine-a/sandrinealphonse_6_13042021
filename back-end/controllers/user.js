@@ -1,17 +1,15 @@
-//Importer modèle User:
+//Importer le modèle User
 const User = require('../models/user');
-
+//Importer les variables d'env
 require('dotenv').config();
-
-//Importer bcrypt pour hash dans signup:
+//Importer bcrypt pour hash dans signup
 const bcrypt = require('bcrypt');
-
-//Importer jsonwebtoken pour générer des token d'auth:
+//Importer jsonwebtoken pour générer des tokens d'authentification
 const jwt = require('jsonwebtoken');
 
 //Fonction signup:
 exports.signup = (req,res,next) => {
-  bcrypt.hash(req.body.password, 10)
+  bcrypt.hash(req.body.password, 12)
   .then(hash => {
     const user = new User({
       email: req.body.email,
@@ -40,7 +38,7 @@ exports.login = (req, res, next) => {
             userId: user._id,
             token: jwt.sign(
             {userId: user._id},
-            'anNvbmNvbXBsZXhfc2VjcmV0X1Rva2Vu',
+            process.env.USER_SECRET_TOKEN,
             {expiresIn: '24h'}
             )
           });

@@ -13,7 +13,7 @@ const storage = multer.diskStorage({
     callback(null, 'images');
   },
   filename: (req, file, callback) => {
-    //Garder la première lettre du nom du fichier + date à ms près + .extension
+    //Garder la première lettre du nom du fichier + date à la ms près + .extension
     const name = file.originalname.slice(0,1); 
     const extension = MIME_TYPES[file.mimetype];
     callback(null, name + Date.now() + '.' + extension);
