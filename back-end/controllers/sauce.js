@@ -35,22 +35,26 @@ exports.getOneSauce = (req, res, next) => {
 //Middleware pour Modifier une sauce:
 exports.modifySauce = (req,res, next) => {
   //verification d'ajout de nouveau file img
-  const sauceObject = req.file ? 
-  //Si fichier img ajouté on supprime l'ancien file avec fs unlinkSync
+  console.log(req.file);
+  const updatedSauce = req.body;
+  if(req.file) {
+    updatedSauce.imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+  }
   Sauce.findOne({ _id: req.params.id})
   .then(sauce => {
-    const filename = sauce.imageUrl.split('/images/')[1];
-    fs.unlinkSync(`images/${filename}`),
-    {
-      ...JSON.parse(req.body.sauce), ///partie sauce
-      imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` //recuperation fichier image
+    console.log(sauce);
+    if(req.file) {
+      const oldFilename = sauce.imageUrl.split('/images/')[1];
+      try {
+        fs.unlinkSync(`images/${oldFilename}`)
+      } catch(error) {
+        console.log(error);
+      }
     }
+    console.log(updatedSauce);
+    Sauce.updateOne({ _id: req.params.id }, updatedSauce)
+    .then(() => res.status(200).json({ message: ' Sauce modifiée !'}))
   })
-  : { //si absence de new file on prend directement l'objet body de la req
-    ...req.body
-  }              
-  Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id})
-  .then(() => res.status(200).json({ message: ' Sauce modifiée !'}))
   .catch(error => res.status(400).json({ error }));
 };
 
@@ -63,12 +67,12 @@ exports.likeOrDislikeSauce = (req,res,next) => {
     Sauce.findOne({ _id: req.params.id})
     .then(sauce => {
       //Like
-      if (req.body.like === like && !sauce.usersLiked.includes(req.body.userId)) {
+      if (req.body.like === like && !sauce.usersLiked.includes(req.body.userId) && !sauce.usersDisliked.includes(req.body.userId)) {
         Sauce.updateOne({ _id: req.params.id },
           { $inc: {likes: +1}, 
           $push: {usersLiked: req.body.userId}
         })
-        .then(() => res.status(201).json({ message: ' Vous avez liké cette sauce !'}))
+        .then(() => res.status(200).json({ message: ' Sauce liked !'}))
         .catch(error => res.status(400).json({ error }));
       }
       //Annuler like
@@ -77,16 +81,16 @@ exports.likeOrDislikeSauce = (req,res,next) => {
           { $inc: {likes: -1}, 
           $pull: {usersLiked: req.body.userId}
         })
-        .then(() => res.status(201).json({ message: ' Vous avez enlevé votre like sur cette sauce !'}))
+        .then(() => res.status(200).json({ message: ' Like cancel'}))
         .catch(error => res.status(400).json({ error }));
       }
       //Dislike sauce
-      else if (req.body.like === dislike && !sauce.usersDisliked.includes(req.body.userId)) {
+      else if (req.body.like === dislike && !sauce.usersDisliked.includes(req.body.userId) && !sauce.usersLiked.includes(req.body.userId)) {
         Sauce.updateOne({ _id: req.params.id },
           { $inc: {dislikes: +1}, 
           $push: {usersDisliked: req.body.userId}
         })
-        .then(() => res.status(201).json({ message: ' Vous avez enlevé votre disliké sur cette sauce !'}))
+        .then(() => res.status(200).json({ message: ' Sauce disliked ! '}))
         .catch(error => res.status(400).json({ error }));
       }
       //Annuler disklie
@@ -95,13 +99,12 @@ exports.likeOrDislikeSauce = (req,res,next) => {
           { $inc: {dislikes: -1}, 
           $pull: {usersDisliked: req.body.userId}
         })
-        .then(() => res.status(201).json({ message: ' Vous avez annulé le dislike de cette sauce !'}))
+        .then(() => res.status(200).json({ message: ' Dislike cancel !'}))
         .catch(error => res.status(400).json({ error }));
-
       }
       // Autre 
       else {
-        res.status(401).json({error: new Error(' Invalid request!')});
+        return res.status(400).json({error: (' Invalid request!')});
       }
     })
     .catch(error => res.status(500).json({ error }));  
