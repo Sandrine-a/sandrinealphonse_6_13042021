@@ -1,6 +1,9 @@
 #les modules node
 node_modules
 
+#Varaibles environnement
+.env
+
 #contenu du dossier images
 *.jp[eg]
 *.png

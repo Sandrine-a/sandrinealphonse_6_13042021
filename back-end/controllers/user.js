@@ -1,6 +1,8 @@
 //Importer modèle User:
 const User = require('../models/user');
 
+require('dotenv').config();
+
 //Importer bcrypt pour hash dans signup:
 const bcrypt = require('bcrypt');
 

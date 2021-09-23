@@ -4,6 +4,7 @@ const cors = require('cors');
 
 //Importer mongoose pour utiliser mongo DB
 const mongoose = require('mongoose');
+require('dotenv').config()
 
 //Importer le chemin vers le fichiers images
 const path = require('path');
@@ -15,7 +16,7 @@ const sauceRoutes = require('./routes/sauce');
 const app = express();
 
 //Authentification mongoAtlas:
-mongoose.connect('mongodb+srv://admin:admin01@piiquante.tmgp6.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+mongoose.connect('mongodb+srv://'+process.env.DATABASE_USERNAME+':'+process.env.DATABASE_PASS+'@'+process.env.DATABASE_CLUSTER+'.tmgp6.mongodb.net/'+process.env.DATABASE_NAME+'?retryWrites=true&w=majority',
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))

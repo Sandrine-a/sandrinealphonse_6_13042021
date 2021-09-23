@@ -1,5 +1,8 @@
 //Importer modèle sauce:
 const Sauce = require('../models/product');
+
+require('dotenv').config();
+
 //Importer le pakg fs pour gestion des fichiers
 const fs = require('fs');
 
@@ -35,14 +38,12 @@ exports.getOneSauce = (req, res, next) => {
 //Middleware pour Modifier une sauce:
 exports.modifySauce = (req,res, next) => {
   //verification d'ajout de nouveau file img
-  console.log(req.file);
   const updatedSauce = req.body;
   if(req.file) {
     updatedSauce.imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
   }
   Sauce.findOne({ _id: req.params.id})
   .then(sauce => {
-    console.log(sauce);
     if(req.file) {
       const oldFilename = sauce.imageUrl.split('/images/')[1];
       try {
@@ -51,7 +52,6 @@ exports.modifySauce = (req,res, next) => {
         console.log(error);
       }
     }
-    console.log(updatedSauce);
     Sauce.updateOne({ _id: req.params.id }, updatedSauce)
     .then(() => res.status(200).json({ message: ' Sauce modifiée !'}))
   })
