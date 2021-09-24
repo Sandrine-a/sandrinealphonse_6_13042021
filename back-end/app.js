@@ -1,4 +1,6 @@
 const express = require('express');
+//Importer Helmet pour sécurité headers
+const helmet = require('helmet');
 
 const cors = require('cors');
 
@@ -13,6 +15,7 @@ const userRoutes = require('./routes/user');
 const sauceRoutes = require('./routes/sauce');
 
 const app = express();
+app.use(helmet());
 
 //Authentification mongoAtlas:
 mongoose.connect('mongodb+srv://'+process.env.DATABASE_USERNAME+':'+process.env.DATABASE_PASS+'@'+process.env.DATABASE_CLUSTER+'.tmgp6.mongodb.net/'+process.env.DATABASE_NAME+'?retryWrites=true&w=majority',

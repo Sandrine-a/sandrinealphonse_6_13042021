@@ -4,8 +4,6 @@ const http = require('http');
 //Importer l'application express:
 const app = require('./app');
 
-//Indication à l'app sur quel port tourner:
-
 //Renvoie un port valide, qu'il soit sous forme de num ou srting:
 const normalizePort = val => {
   const port = parseInt(val, 10);
