@@ -1,13 +1,10 @@
-//Importer modèle sauce
+//Import modèle sauce
 const Sauce = require('../models/product');
-//Importer le packg fs pour gestion des fichiers
+//Import le packg fs pour gestion des fichiers
 const fs = require('fs');
-
 
 //Middleware pour créer une sauce:
 exports.createSauce = (req, res, next) => {
-  console.log(req.body);
-  console.log(req.body.sauce);
   const sauceObject = JSON.parse(req.body.sauce);
   const sauce = new Sauce({
     ...sauceObject,
@@ -37,14 +34,16 @@ exports.getOneSauce = (req, res, next) => {
 
 //Middleware pour Modifier une sauce:
 exports.modifySauce = (req,res, next) => {
-  //verification d'ajout de nouveau file img
-  const updatedSauce = req.body;
-  if(req.file) {
-    updatedSauce.imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+  const updatedSauce = req.file ? { 
+    ...JSON.parse(req.body.sauce),
+    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+  } : {
+    ...req.body
   }
-  Sauce.findOne({ _id: req.params.id})
+  Sauce.findOne({ _id: req.params.id}) //Recherche de la sauce modifiée en BDD 
   .then(sauce => {
     if(req.file) {
+      //Suppression de l'ancienne image de la BDD
       const oldFilename = sauce.imageUrl.split('/images/')[1];
       try {
         fs.unlinkSync(`images/${oldFilename}`)
@@ -52,9 +51,9 @@ exports.modifySauce = (req,res, next) => {
         throw new Error("Erreur avec l'image envoyée")
       }
     }
-    Sauce.updateOne({ _id: req.params.id }, updatedSauce)
-    .then(() => res.status(200).json({ message: ' Sauce modifiée !'}))
   })
+  Sauce.updateOne({ _id: req.params.id }, updatedSauce)
+  .then(() => res.status(200).json({ message: ' Sauce modifiée !'}))
   .catch(error => res.status(400).json({ error }));
 };
 

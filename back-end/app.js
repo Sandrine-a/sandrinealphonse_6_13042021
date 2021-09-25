@@ -22,8 +22,8 @@ const limiter = rateLimit({
 });
 //Limiter requetes pour login et signup:
 const authentifyUserLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000, // 1 hour window
-  max: 5, // start blocking after 5 requests
+  windowMs: 30 * 60 * 1000, // 1 hour window
+  max: 10, // start blocking after 5 requests
   message:
     "Too many authentifications from this IP, please try again after an hour"
 });

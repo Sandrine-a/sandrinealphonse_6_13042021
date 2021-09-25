@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt');
 //Importer jsonwebtoken pour générer des tokens d'authentification
 const jwt = require('jsonwebtoken');
 
-//Fonction signup:
+//Middleware signup:
 exports.signup = (req,res,next) => {
   bcrypt.hash(req.body.password, 12)
   .then(hash => {
@@ -22,7 +22,7 @@ exports.signup = (req,res,next) => {
   .catch(error => res.status(500).json({ error }));
 };
 
-//Fonction login:
+//Middleware login:
 exports.login = (req, res, next) => {
   User.findOne({ email: req.body.email })
     .then(user => {

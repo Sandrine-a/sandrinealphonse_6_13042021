@@ -1,7 +1,6 @@
 const express = require('express');
 
 const router = express.Router();
-
 //Import du middleware d'authentification
 const auth = require('../middleware/auth');
 //Import du middleware d'authentification
