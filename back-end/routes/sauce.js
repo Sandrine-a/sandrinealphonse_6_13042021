@@ -2,11 +2,11 @@ const express = require('express');
 
 const router = express.Router();
 
-//Importation du middleware d'authentification
+//Import du middleware d'authentification
 const auth = require('../middleware/auth');
-//Importation du middleware d'authentification
+//Import du middleware d'authentification
 const multer = require('../middleware/multer-config');
-//Importer controleur user:
+//Importcontroleur user:
 const sauceCtrl = require('../controllers/sauce');
 
 //Route pour affichertoutes les sauces:

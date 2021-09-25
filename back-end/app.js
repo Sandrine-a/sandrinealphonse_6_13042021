@@ -1,21 +1,33 @@
 const express = require('express');
-//Importer Helmet pour sécurité headers
+//Import limiteur de req:
+const rateLimit = require("express-rate-limit");
+//Import Helmet pour sécurité headers
 const helmet = require('helmet');
-
+//Import cors
 const cors = require('cors');
-
-//Importer mongoose pour utiliser mongo DB
+//Import mongoose pour utiliser mongo DB
 const mongoose = require('mongoose');
-
-//Importer le chemin vers le fichiers images
+//Import le chemin vers le fichiers images
 const path = require('path');
-//Importation des routers:
+//Import des routers
 const userRoutes = require('./routes/user');
-//Routers les sauces:
+//Routers les sauces
 const sauceRoutes = require('./routes/sauce');
 
+//Limiteur de requetes pour sauce
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100,// limit each IP to 100 requests per windowMs
+});
+//Limiter requetes pour login et signup:
+const authentifyUserLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour window
+  max: 5, // start blocking after 5 requests
+  message:
+    "Too many authentifications from this IP, please try again after an hour"
+});
+
 const app = express();
-app.use(helmet());
 
 //Authentification mongoAtlas:
 mongoose.connect('mongodb+srv://'+process.env.DATABASE_USERNAME+':'+process.env.DATABASE_PASS+'@'+process.env.DATABASE_CLUSTER+'.tmgp6.mongodb.net/'+process.env.DATABASE_NAME+'?retryWrites=true&w=majority',
@@ -25,6 +37,7 @@ mongoose.connect('mongodb+srv://'+process.env.DATABASE_USERNAME+':'+process.env.
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
 
+app.use(helmet());
 //Gestion des erreurs de CORS:
 app.use(
   cors({
@@ -36,19 +49,17 @@ app.use(
     exposedHeaders: ['X-Filename'],
   }),
 );
-
 //Analyse du corps de la req
 app.use(express.urlencoded({extended: true}));
-
 app.use(express.json());
 
 //Middleware pour telechargement d'image vers le static:
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 //Utilisation des routes user:
-app.use('/api/auth', userRoutes);
+app.use('/api/auth', authentifyUserLimiter, userRoutes);
 
 //Utilisation des routes user:
-app.use('/api/sauces', sauceRoutes);
+app.use('/api/sauces', limiter, sauceRoutes);
 
 module.exports = app;

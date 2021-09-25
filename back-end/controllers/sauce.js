@@ -3,8 +3,11 @@ const Sauce = require('../models/product');
 //Importer le packg fs pour gestion des fichiers
 const fs = require('fs');
 
+
 //Middleware pour créer une sauce:
 exports.createSauce = (req, res, next) => {
+  console.log(req.body);
+  console.log(req.body.sauce);
   const sauceObject = JSON.parse(req.body.sauce);
   const sauce = new Sauce({
     ...sauceObject,
