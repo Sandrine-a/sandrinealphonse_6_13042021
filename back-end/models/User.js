@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-//Importer unique validator:
+//Import unique validator:
 const uniqueValidator = require('mongoose-unique-validator');
 
 //Création du schema de données pour User

@@ -11,8 +11,9 @@ const mongoose = require('mongoose');
 const path = require('path');
 //Import des routers
 const userRoutes = require('./routes/user');
-//Routers les sauces
 const sauceRoutes = require('./routes/sauce');
+//Import de mongoose-express-sanitize
+const mongoSanitize = require('express-mongo-sanitize');
 
 //Limiteur de requetes pour sauce
 const limiter = rateLimit({
@@ -36,8 +37,10 @@ mongoose.connect('mongodb+srv://'+process.env.DATABASE_USERNAME+':'+process.env.
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
-
 app.use(helmet());
+
+app.use(mongoSanitize());
+
 //Gestion des erreurs de CORS:
 app.use(
   cors({
@@ -53,7 +56,7 @@ app.use(
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 
-//Middleware pour telechargement d'image vers le static:
+//Pour telechargement des images vers le static:
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 //Utilisation des routes user:

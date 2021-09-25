@@ -6,7 +6,7 @@ const router = express.Router();
 const auth = require('../middleware/auth');
 //Import du middleware d'authentification
 const multer = require('../middleware/multer-config');
-//Importcontroleur user:
+//Import controleur user:
 const sauceCtrl = require('../controllers/sauce');
 
 //Route pour affichertoutes les sauces:
@@ -21,7 +21,6 @@ router.put('/:id', auth, multer, sauceCtrl.modifySauce);
 router.post('/:id/like', auth, sauceCtrl.likeOrDislikeSauce);
 //Route pour supprimer sauce:
 router.delete('/:id', auth, sauceCtrl.deleteSauce);
-
 
 //Export des routes users:
 module.exports = router;
